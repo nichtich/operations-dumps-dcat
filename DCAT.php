@@ -30,7 +30,7 @@ function validateConfig( array $config ) {
 		"catalog-i18n", "catalog-issued"
 	);
 	$sub = array(
-		"publisher" => array( "publisherType", "homepage", "name", "email" ),
+		"publisher" => array( "publisherType", "homepage", "name", "email", "uri" ),
 		"contactPoint" => array( "vcardType", "name", "email" ),
 		"ld-info" => array( "accessURL", "mediatype", "license" )
 	);
@@ -124,7 +124,7 @@ function makeDataBlob( $config ) {
 
 	// hardcoded ids
 	$ids = array(
-		'publisher' => '_n42',
+        'publisher' => $config['publisher']['uri'],
 		'contactPoint' => '_n43',
 		'dataset' => array(
 			'live' => 'liveData',
@@ -350,7 +350,7 @@ function writeDataset( XMLWriter $xml, array $data, $dumpDate, array $distributi
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'publisher', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
+	$xml->writeAttributeNS( 'rdf', 'resource', null, $data['ids']['publisher'] );
 	$xml->endElement();
 
 	if ( is_null( $dumpDate ) ) {
@@ -395,7 +395,7 @@ function writeDataset( XMLWriter $xml, array $data, $dumpDate, array $distributi
  */
 function writePublisher( XMLWriter $xml, array $data ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
+	$xml->writeAttributeNS( 'rdf', 'about', null, $data['ids']['publisher'] );
 
 	$xml->startElementNS( 'rdf', 'type', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null,
@@ -520,7 +520,7 @@ function writeCatalog( XMLWriter $xml, array $data, array $dataset ) {
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'publisher', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
+	$xml->writeAttributeNS( 'rdf', 'resource', null, $data['ids']['publisher'] );
 	$xml->endElement();
 
 	// add language, title and description in each language
